@@ -1,6 +1,7 @@
-# mini_LLM_robust_study
-Fine-tuning FLAN-T5-small on BoolQ and evaluating robustness under paraphrases, typos, and distractors. Includes reproducible training and evaluation pipeline.
 # FLAN-T5 Robustness Study on BoolQ
+Fine-tuning FLAN-T5-small on BoolQ and evaluating robustness under paraphrases, typos, and distractors. Includes reproducible training and evaluation pipeline.
+
+**Key Insight:** Fine-tuning small instruction-tuned models on binary QA tasks can lead to *majority-class collapse*, where the model learns to predict the dominant label rather than solving the task.
 
 ## Overview
 
