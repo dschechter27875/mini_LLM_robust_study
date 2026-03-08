@@ -99,6 +99,45 @@ Balanced evaluation results (example subset):
 
 ---
 
+## Robustness Evaluation Results
+
+Accuracy was measured on the BoolQ validation set under multiple input perturbations.
+
+| Model | Clean | Typos | Distractor | Paraphrase |
+|------|------|------|------|------|
+| FLAN-T5-small (base) | 0.604 | 0.562 | 0.424 | 0.600 |
+| FLAN-T5-small (fine-tuned) | 0.622 | 0.622 | 0.622 | 0.622 |
+
+### Observations
+
+1. The **base model** shows expected robustness degradation:
+   - typos reduce performance slightly
+   - distractor sentences significantly reduce accuracy
+
+2. The **fine-tuned model shows identical accuracy across all perturbations**.
+
+3. This behavior indicates that the fine-tuned model learned a **constant-label prediction strategy**, rather than solving the reasoning task.
+----
+
+## Key Insight
+
+Fine-tuning small instruction-tuned models on imbalanced binary QA datasets can produce **degenerate decision boundaries**.
+
+In this experiment, the fine-tuned model converged to predicting the **majority label ("yes") for every example**.
+
+Because the BoolQ dataset contains ~62% "yes" answers, this trivial strategy achieves:
+
+Accuracy ≈ 0.62
+
+As a result:
+
+- performance appears strong on the original validation distribution
+- robustness experiments show **no degradation under perturbations**
+
+However, this apparent robustness is misleading — the model is **not solving the task**, but instead exploiting dataset imbalance.
+
+--- 
+
 ## Key Findings
 
 ### 1. Majority-Class Collapse Can Occur During Fine-Tuning
@@ -153,6 +192,19 @@ can significantly influence the final model behavior.
 Adding perturbations such as typos, paraphrases, and distracting context helps simulate real-world inputs.
 
 However, robustness metrics can be misleading if the underlying dataset contains structural biases. Careful dataset construction and analysis are necessary for meaningful robustness evaluation.
+
+---
+
+## Limitations
+
+This study focuses on a small instruction-tuned model (FLAN-T5-small).
+
+Additional experiments could explore:
+
+- larger models (FLAN-T5-base / large)
+- different fine-tuning objectives
+- classification heads instead of generative decoding
+- stronger adversarial perturbations
 
 ---
 
